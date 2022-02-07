@@ -6,11 +6,18 @@
 
     <groupId>org.maukaim.jif</groupId>
     <artifactId>annotation-processor-example</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <version>${revision}</version>
 
     <properties>
+        <revision>1.0-SNAPSHOT</revision>
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
     </properties>
+
+    <modules>
+        <module>example-core</module>
+        <module>annotation-processor-module</module>
+    </modules>
 
 </project>
