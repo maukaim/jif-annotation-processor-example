@@ -17,6 +17,16 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+/**
+ * TODO: Refactor the whole system
+ * - 1 Strategy Pattern pour les 3 case de constructor check
+ * - CheckConstructorUtils should be static?
+ * - Comments should only exist if error! Refacto comments following way:
+ * - X implements Y. Constructor Check required:
+ * - expected: ...... (or "no-args")
+ * - actual: ...... (or "n" constructors with parameters.)
+ * - Please provide the expected constructor.
+ */
 @AutoService(Processor.class)
 public class CheckConstructorProcessor extends AbstractProcessor {
 

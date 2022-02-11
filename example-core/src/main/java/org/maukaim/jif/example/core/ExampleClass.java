@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class ExampleClass implements ExampleInterface {
     private final String exampleStringField;
-    private final List<String> exampleGenericField;
+    private final Map<String, Integer> exampleGenericField;
 
 
-    public ExampleClass(List<String> list, String str) {
+    public ExampleClass(Map<String,Integer> list,  String str) {
         this.exampleStringField = str;
         this.exampleGenericField = list;
     }

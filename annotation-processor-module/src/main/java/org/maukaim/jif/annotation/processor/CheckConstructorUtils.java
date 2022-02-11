@@ -2,6 +2,7 @@ package org.maukaim.jif.annotation.processor;
 
 import javax.lang.model.element.*;
 import javax.lang.model.type.MirroredTypeException;
+import javax.lang.model.type.MirroredTypesException;
 import javax.lang.model.type.TypeMirror;
 import java.util.HashMap;
 import java.util.List;
@@ -15,13 +16,14 @@ public class CheckConstructorUtils {
         StringBuilder res = new StringBuilder(
                 Objects.requireNonNullElse(this.getValueAsTypeMirror(paramType), "")
                         .toString());
-        TypeMirror genericsAsTypeMirror = this.getGenericAsTypeMirror(paramType);
-        String genericsType = Objects.requireNonNullElse(genericsAsTypeMirror, "").toString();
-        if (!Void.class.getName().equals(genericsType)) {
-            res.append("<")
-                    .append(genericsType)
-                    .append(">");
+        List<? extends TypeMirror> genericsAsTypeMirrors = this.getGenericsAsTypeMirrors(paramType);
+
+        if (!genericsAsTypeMirrors.isEmpty()) {
+            String genericMarker = String.format("<%s>",
+                    genericsAsTypeMirrors.stream().map(TypeMirror::toString).collect(Collectors.joining(",")));
+            res.append(genericMarker);
         }
+
         return res.toString();
     }
 
@@ -88,14 +90,14 @@ public class CheckConstructorUtils {
         return null;
     }
 
-    private TypeMirror getGenericAsTypeMirror(ParamType paramType) {
+    private List<? extends TypeMirror> getGenericsAsTypeMirrors(ParamType paramType) {
         try {
-            paramType.genericType();
-        } catch (MirroredTypeException e) {
-            return e.getTypeMirror();
+            paramType.genericTypes();
+        } catch (MirroredTypesException e) {
+            return e.getTypeMirrors();
         }
 
-        return null;
+        return List.of();
     }
 
 

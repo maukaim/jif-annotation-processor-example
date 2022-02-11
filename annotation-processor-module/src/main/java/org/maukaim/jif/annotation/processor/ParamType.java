@@ -17,5 +17,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Inherited
 public @interface ParamType {
     Class<?> value();
-    Class<?> genericType() default Void.class;
+    Class<?>[] genericTypes() default {};
 }

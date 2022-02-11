@@ -5,12 +5,15 @@ import org.maukaim.jif.annotation.processor.ParamType;
 import org.maukaim.jif.annotation.processor.ProvideConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 @ProvideConstructor(value = {
-        @ParamType(value = List.class, genericType = String.class),
-        @ParamType(String.class)
+        @ParamType(String.class),
+        @ParamType(value = List.class, genericTypes = Integer.class),
+
 },
-        isOrdered = true)
+        isOrdered = false)
 public interface ExampleInterface {
 
 }
+
