@@ -1,5 +1,6 @@
 package org.maukaim.jif.annotation.processor;
 
+import javax.lang.model.type.NullType;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
@@ -9,11 +10,12 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Check if Constructor has the arguments required
+ * Check if Constructor with list of classes <>value</> exist
  */
 @Retention(RUNTIME)
 @Target(TYPE)
 @Inherited
-public @interface CheckConstructor {
-    Class<?>[] value() default {};
+public @interface ParamType {
+    Class<?> value();
+    Class<?> genericType() default Void.class;
 }
