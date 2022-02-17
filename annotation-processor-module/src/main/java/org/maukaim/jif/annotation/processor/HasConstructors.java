@@ -2,19 +2,17 @@ package org.maukaim.jif.annotation.processor;
 
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Check if Constructor with list of classes <>value</> exist
  */
-@Retention(RUNTIME)
+@Retention(RetentionPolicy.SOURCE)
 @Target(TYPE)
 @Inherited
-public @interface ParamType {
-    Class<?> value();
-
-    Class<?>[] genericTypes() default {};
+public @interface HasConstructors {
+    HasConstructor[] value();
 }

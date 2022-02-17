@@ -18,13 +18,13 @@ import java.util.Set;
 
 
 @AutoService(Processor.class)
-public class CheckConstructorProcessor extends AbstractProcessor {
+public class HasConstructorProcessor extends AbstractProcessor {
 
     @Override
     public Set<String> getSupportedAnnotationTypes() {
 
-        return Set.of(ProvideConstructor.class.getCanonicalName(),
-                ProvideConstructors.class.getCanonicalName());
+        return Set.of(HasConstructor.class.getCanonicalName(),
+                HasConstructors.class.getCanonicalName());
     }
 
     @Override
@@ -40,11 +40,11 @@ public class CheckConstructorProcessor extends AbstractProcessor {
 
             for (Element annotatedType : annotatedTypes) {
 
-                ProvideConstructor[] provideConstructors = annotatedType.getAnnotationsByType(ProvideConstructor.class);
-                List<ProvideConstructor> provideConstructorList = Arrays.stream(provideConstructors).toList();
+                HasConstructor[] hasConstructors = annotatedType.getAnnotationsByType(HasConstructor.class);
+                List<HasConstructor> hasConstructorList = Arrays.stream(hasConstructors).toList();
 
                 if (annotatedType.getKind().isClass() && !annotatedType.getModifiers().contains(Modifier.ABSTRACT)) {
-                    provideConstructorList.forEach(annInstance -> this.processElement(annotatedType, annInstance));
+                    hasConstructorList.forEach(annInstance -> this.processElement(annotatedType, annInstance));
                 }
 
                 TypeMirror annEltAsType = annotatedType.asType();
@@ -53,7 +53,7 @@ public class CheckConstructorProcessor extends AbstractProcessor {
                                        !elt.getModifiers().contains(Modifier.ABSTRACT) &&
                                        processingEnv.getTypeUtils().isAssignable(elt.asType(), annEltAsType) &&
                                        !elt.equals(annotatedType))
-                        .forEach(elt -> provideConstructorList.forEach(annInstance ->
+                        .forEach(elt -> hasConstructorList.forEach(annInstance ->
                                 this.processElement(elt, annInstance)));
 
             }
@@ -62,21 +62,21 @@ public class CheckConstructorProcessor extends AbstractProcessor {
     }
 
 
-    private void processElement(Element elt, ProvideConstructor provideConstructorAnnotation) {
-        ParamType[] parametersExpected = provideConstructorAnnotation.value();
+    private void processElement(Element elt, HasConstructor hasConstructorAnnotation) {
+        Parameter[] parametersExpected = hasConstructorAnnotation.value();
 
         ConstructorChecker checker = parametersExpected.length == 0 ?
-                ConstructorChecker.noArgs() : provideConstructorAnnotation.isOrdered() ?
+                ConstructorChecker.noArgs() : hasConstructorAnnotation.isOrdered() ?
                 ConstructorChecker.ordered() : ConstructorChecker.unOrdered();
 
         boolean aConstructorMatches = elt.getEnclosedElements().stream()
-                .filter(CheckConstructorUtils::isPublicConstructor)
+                .filter(HasConstructorUtils::isPublicConstructor)
                 .map(elem -> (ExecutableElement) elem)
                 .anyMatch(constructor -> checker.check(constructor, parametersExpected));
 
         if (!aConstructorMatches) {
-            String message = CheckConstructorUtils.buildErrorMessage(
-                    elt.getSimpleName(), provideConstructorAnnotation.isOrdered(), parametersExpected);
+            String message = HasConstructorUtils.buildErrorMessage(
+                    elt.getSimpleName(), hasConstructorAnnotation.isOrdered(), parametersExpected);
 
             this.processingEnv.getMessager()
                     .printMessage(Diagnostic.Kind.ERROR, message, elt);

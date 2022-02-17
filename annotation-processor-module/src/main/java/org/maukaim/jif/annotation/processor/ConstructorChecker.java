@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public interface ConstructorChecker {
-    boolean check(ExecutableElement constructor, ParamType[] parametersExpected);
+    boolean check(ExecutableElement constructor, Parameter[] parametersExpected);
 
     static ConstructorChecker noArgs() {
         return (constructor, parametersExpected) -> constructor.getParameters().size() == 0;
@@ -23,8 +23,8 @@ public interface ConstructorChecker {
             } else {
                 for (int i = 0; i < parametersExpected.length; i++) {
                     VariableElement param = parameters.get(i);
-                    ParamType paramExpected = parametersExpected[i];
-                    if (!param.asType().toString().equals(CheckConstructorUtils.toString(paramExpected))) {
+                    Parameter paramExpected = parametersExpected[i];
+                    if (!param.asType().toString().equals(HasConstructorUtils.toString(paramExpected))) {
                         return false;
                     }
                 }
@@ -40,8 +40,8 @@ public interface ConstructorChecker {
                 return false;
             } else {
                 Map<String, Long> expectedParamStats = new HashMap<>();
-                for (ParamType paramType : parametersExpected) {
-                    String cpString = CheckConstructorUtils.toString(paramType);
+                for (Parameter parameter : parametersExpected) {
+                    String cpString = HasConstructorUtils.toString(parameter);
                     expectedParamStats.compute(cpString, (key, val) -> Objects.requireNonNullElse(val, 0L) + 1);
                 }
 

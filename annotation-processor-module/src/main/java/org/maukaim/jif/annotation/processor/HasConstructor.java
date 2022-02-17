@@ -1,9 +1,6 @@
 package org.maukaim.jif.annotation.processor;
 
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.TYPE;
 
@@ -13,6 +10,9 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(RetentionPolicy.SOURCE)
 @Target(TYPE)
 @Inherited
-public @interface ProvideConstructors {
-    ProvideConstructor[] value();
+@Repeatable(HasConstructors.class)
+public @interface HasConstructor {
+    Parameter[] value() default {};
+
+    boolean isOrdered() default true;
 }
