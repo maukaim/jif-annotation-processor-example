@@ -10,7 +10,9 @@ import static java.lang.annotation.ElementType.TYPE;
 @Retention(RetentionPolicy.SOURCE)
 @Target(TYPE)
 @Inherited
+@Repeatable(ProvideConstructors.class)
 public @interface ProvideConstructor {
     ParamType[] value() default {};
+
     boolean isOrdered() default true;
 }
